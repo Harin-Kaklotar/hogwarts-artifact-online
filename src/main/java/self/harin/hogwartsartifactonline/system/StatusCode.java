@@ -1,0 +1,10 @@
+package self.harin.hogwartsartifactonline.system;
+
+public class StatusCode {
+    public static final int SUCCESS = 200; // Success
+    public static final int INVALID_ARGUMENT = 400; //Bad request, eg, invalid argument
+    public static final int UNAUTHORISED = 401; // username password incorrect
+    public static final int FORBIDDEN = 403; // No permission
+    public static final int NOT_FOUND = 404; // not found
+    public static final int INTERNAL_SERVER_ERROR = 500; // Server internal error
+}
