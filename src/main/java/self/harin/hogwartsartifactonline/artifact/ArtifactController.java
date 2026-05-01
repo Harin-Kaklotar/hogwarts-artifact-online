@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/artifacts")
+@RequestMapping("${api.endpoint.base-url}/artifacts")
 public class ArtifactController {
 
     private final ArtifactService artifactService;
@@ -49,7 +49,7 @@ public class ArtifactController {
 
 
     @PostMapping
-    public Result addArtifact(@Valid @RequestBody ArtifactDto artifactDto){
+    public Result addArtifact(@Valid @RequestBody ArtifactDto artifactDto) {
         Artifact artifact = this.artifactDtoToArtifactConverter.convert(artifactDto);
         Artifact savedArtifact = this.artifactService.save(artifact);
         ArtifactDto savedArtifactDto = this.artifactToArtifactDtoConvertor.convert(savedArtifact);
@@ -58,7 +58,7 @@ public class ArtifactController {
 
 
     @PutMapping("/{artifactId}")
-    public Result updateArtifact(@PathVariable String artifactId, @Valid @RequestBody ArtifactDto artifactDto){
+    public Result updateArtifact(@PathVariable String artifactId, @Valid @RequestBody ArtifactDto artifactDto) {
         Artifact update = this.artifactDtoToArtifactConverter.convert(artifactDto);
         Artifact updatedArtifact = this.artifactService.update(artifactId, update);
         ArtifactDto updatedArtifactDto = this.artifactToArtifactDtoConvertor.convert(updatedArtifact);
@@ -66,7 +66,7 @@ public class ArtifactController {
     }
 
     @DeleteMapping("/{artifactId}")
-    public Result deleteArtifact(@PathVariable String artifactId){
+    public Result deleteArtifact(@PathVariable String artifactId) {
         this.artifactService.delete(artifactId);
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }
