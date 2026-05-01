@@ -8,13 +8,13 @@ import self.harin.hogwartsartifactonline.artifact.utils.IdWorker;
 @SpringBootApplication
 public class HogwartsArtifactOnlineApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HogwartsArtifactOnlineApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(HogwartsArtifactOnlineApplication.class, args);
+    }
 
-	@Bean
-	public IdWorker idWorker(){
-		return new IdWorker(1,1);
-	}
+    @Bean
+    public IdWorker idWorker() {
+        return new IdWorker(1, 1);
+    }
 
 }

@@ -3,6 +3,7 @@ package self.harin.hogwartsartifactonline.artifact;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import self.harin.hogwartsartifactonline.artifact.utils.IdWorker;
+import self.harin.hogwartsartifactonline.system.exception.ObjectNotFoundException;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class ArtifactService {
 
     public Artifact findById(String artifactId) {
         return this.artifactRepository.findById(artifactId).orElseThrow(() ->
-                new ArtifactNotFoundException(artifactId)
+                new ObjectNotFoundException("artifact", artifactId)
         );
     }
 
@@ -47,14 +48,14 @@ public class ArtifactService {
 
                     return updatedArtifact;
                 })
-                .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
+                .orElseThrow(() -> new ObjectNotFoundException("artifact", artifactId));
 
     }
 
     public void delete(String artifactId) {
         this.artifactRepository.findById(artifactId)
                 .orElseThrow(() ->
-                        new ArtifactNotFoundException(artifactId)
+                        new ObjectNotFoundException("artifact", artifactId)
                 );
         this.artifactRepository.deleteById(artifactId);
     }

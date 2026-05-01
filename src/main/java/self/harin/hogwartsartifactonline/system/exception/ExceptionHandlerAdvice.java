@@ -7,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import self.harin.hogwartsartifactonline.artifact.ArtifactNotFoundException;
 import self.harin.hogwartsartifactonline.system.Result;
 import self.harin.hogwartsartifactonline.system.StatusCode;
 
@@ -18,12 +17,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler(ArtifactNotFoundException.class)
+    @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    Result handleArtifactNotFoundException(ArtifactNotFoundException exception) {
+    Result handleObjectNotFoundException(ObjectNotFoundException exception) {
         return new Result(false, StatusCode.NOT_FOUND, exception.getMessage());
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
