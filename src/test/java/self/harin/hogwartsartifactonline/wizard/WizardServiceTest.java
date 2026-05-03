@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import self.harin.hogwartsartifactonline.artifact.Artifact;
+import self.harin.hogwartsartifactonline.artifact.ArtifactRepository;
 import self.harin.hogwartsartifactonline.system.exception.ObjectNotFoundException;
 
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class WizardServiceTest {
 
     @Mock
     WizardRepository wizardRepository;
+
+    @Mock
+    ArtifactRepository artifactRepository;
 
     @InjectMocks
     WizardService wizardService;
@@ -186,5 +191,77 @@ public class WizardServiceTest {
         });
         // Then
         verify(this.wizardRepository, times(1)).findById(10);
+    }
+
+    @Test
+    public void testAssignArtifactSuccess() {
+        // Given
+        Artifact a = new Artifact();
+        a.setId("1250808601744904196");
+        a.setName("Invisibility Cloak");
+        a.setDescription("An invisibility cloak is used to make the wearer invisible");
+        a.setImageUrl("imageUrl");
+
+        Wizard w2 = new Wizard();
+        w2.setId(2);
+        w2.setName("Harry Potter");
+        w2.addArtifact(a);
+
+        Wizard w3 = new Wizard();
+        w3.setId(3);
+        w3.setName("Neville Longbottom");
+
+        given(this.artifactRepository.findById("1250808601744904196")).willReturn(Optional.of(a));
+        given(this.wizardRepository.findById(3)).willReturn(Optional.of(w3));
+
+        // When
+        this.wizardService.assignArtifact(3, "1250808601744904196");
+
+        // Then
+        assertThat(a.getOwner().getId()).isEqualTo(w3.getId());
+        assertThat(w3.getArtifacts()).contains(a);
+
+    }
+
+    @Test
+    public void testAssignArtifactErrorWithNonExistentWizardId() {
+        // Given
+        Artifact a = new Artifact();
+        a.setId("1250808601744904196");
+        a.setName("Invisibility Cloak");
+        a.setDescription("An invisibility cloak is used to make the wearer invisible");
+        a.setImageUrl("imageUrl");
+
+        Wizard w2 = new Wizard();
+        w2.setId(2);
+        w2.setName("Harry Potter");
+        w2.addArtifact(a);
+
+        given(this.artifactRepository.findById("1250808601744904196")).willReturn(Optional.of(a));
+        given(this.wizardRepository.findById(3)).willReturn(Optional.empty());
+
+        // When
+        Throwable thown = catchThrowable( () -> {
+            this.wizardService.assignArtifact(3, "1250808601744904196");
+        } );
+        // Then
+        assertThat(thown).isInstanceOf(ObjectNotFoundException.class)
+                .hasMessage("Could not find wizard with Id 3 :(");
+        assertThat(a.getOwner().getId()).isEqualTo(2);
+    }
+
+    @Test
+    public void testAssignArtifactErrorWithNonExistentArtifactId() {
+        // Given
+        given(this.artifactRepository.findById("1250808601744904196")).willReturn(Optional.empty());
+
+        // When
+        Throwable thown = catchThrowable( () -> {
+            this.wizardService.assignArtifact(3, "1250808601744904196");
+        } );
+        // Then
+        assertThat(thown).isInstanceOf(ObjectNotFoundException.class)
+                .hasMessage("Could not find artifact with Id 1250808601744904196 :(");
+
     }
 }
